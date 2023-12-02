@@ -14,9 +14,6 @@
     "crm": {
       "cards": [
         {
-          "file": "extensions/shuttle-bus-quotes.json"
-        },
-        {
           "file": "extensions/dec-2.json"
         }
       ]
