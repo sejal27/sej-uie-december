@@ -32,15 +32,15 @@ const CalendarView = ({ context }) => {
   return (
     <>
       <Text>
-        Hello {context.user.firstName}! You have {daysUntilchristmas} remaining until Christmas
-        🎄🎄🎄.
+        Hello {context.user.firstName}! You have {daysUntilchristmas} remaining
+        until Christmas 🎄🎄🎄.
       </Text>
 
       <Table bordered={true}>
         <TableHead>
           <TableRow>
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-              <TableHeader align="center" key={day}>
+              <TableHeader align="center" width="auto" key={day}>
                 {day}
               </TableHeader>
             ))}
@@ -56,7 +56,7 @@ const CalendarView = ({ context }) => {
                   return <TableCell key={j} />;
                 }
                 return (
-                  <TableCell align="center" key={j}>
+                  <TableCell align="center" width="auto" key={j}>
                     {day.getDate() === today.getDate() ? (
                       <Heading>🏆 {day.getDate()} 🏆</Heading>
                     ) : day.getDate() === 25 && day.getMonth() === 11 ? (
@@ -74,4 +74,3 @@ const CalendarView = ({ context }) => {
     </>
   );
 };
-`;
