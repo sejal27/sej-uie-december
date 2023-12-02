@@ -1,7 +1,7 @@
 {
-  "name": "Shuttle bus quotes",
-  "description": "Shuttle bus quotes",
-  "uid": "shuttle_bus_quotes_app",
+  "name": "Sej December Experiments",
+  "description": "",
+  "uid": "dec-experiments-app",
   "scopes": [
     "crm.objects.deals.read",
     "crm.objects.deals.write",
@@ -15,6 +15,9 @@
       "cards": [
         {
           "file": "extensions/shuttle-bus-quotes.json"
+        },
+        {
+          "file": "extensions/dec-2.json"
         }
       ]
     }

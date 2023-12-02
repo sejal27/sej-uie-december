@@ -1,0 +1,12 @@
+{
+  "type": "crm-card",
+  "data": {
+    "title": "December 2",
+    "uid": "dec-card-1",
+    "location": "crm.record.tab",
+    "module": {
+      "file": "dec-2.jsx"
+    },
+    "objectTypes": [{ "name": "companies" }]
+  }
+}
