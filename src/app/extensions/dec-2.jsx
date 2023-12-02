@@ -1,11 +1,9 @@
-`/* eslint-disable react/prop-types */
 import React from "react";
 import {
   eachWeekOfInterval,
   startOfMonth,
   endOfMonth,
   differenceInDays,
-  addYears,
 } from "date-fns";
 import {
   hubspot,
