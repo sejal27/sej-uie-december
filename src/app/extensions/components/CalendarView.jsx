@@ -1,46 +1,24 @@
 import React from "react";
 import {
-  eachWeekOfInterval,
-  startOfMonth,
-  endOfMonth,
-  differenceInDays,
-} from "date-fns";
-import {
-  hubspot,
   Text,
   Table,
   TableBody,
+  Flex,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  Heading,
 } from "@hubspot/ui-extensions";
 
-hubspot.extend(({ context }) => <CalendarView context={context} />);
-const CalendarView = ({ context }) => {
+export default function CalendarView({ weeks }) {
   let today = new Date();
-  const weeks = eachWeekOfInterval({
-    start: startOfMonth(today),
-    end: endOfMonth(today),
-  });
-  console.log("today:", today);
-
-  const christmasThisYear = new Date(today.getFullYear(), 11, 25);
-  const daysUntilchristmas = differenceInDays(christmasThisYear, today);
-
   return (
     <>
-      <Text>
-        Hello {context.user.firstName}! You have {daysUntilchristmas} remaining
-        until Christmas 🎄🎄🎄.
-      </Text>
-
       <Table bordered={true}>
         <TableHead>
           <TableRow>
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-              <TableHeader align="center" width="auto" key={day}>
+              <TableHeader width="auto" align="center" key={day}>
                 {day}
               </TableHeader>
             ))}
@@ -58,11 +36,21 @@ const CalendarView = ({ context }) => {
                 return (
                   <TableCell align="center" width="auto" key={j}>
                     {day.getDate() === today.getDate() ? (
-                      <Heading>🏆 {day.getDate()} 🏆</Heading>
+                      <Flex direction="column">
+                        <Text format={{ fontWeight: "bold" }}>
+                          {day.getDate()} 🌟
+                        </Text>
+                      </Flex>
                     ) : day.getDate() === 25 && day.getMonth() === 11 ? (
-                      <Heading>🎄 {day.getDate()} 🎄</Heading>
+                      <Flex direction="column">
+                        <Text format={{ fontWeight: "bold" }}>
+                          {day.getDate()} 🎄
+                        </Text>
+                      </Flex>
                     ) : (
-                      <Heading>{day.getDate()}</Heading>
+                      <Flex direction="column">
+                        <Text>{day.getDate()}</Text>
+                      </Flex>
                     )}
                   </TableCell>
                 );
@@ -73,4 +61,4 @@ const CalendarView = ({ context }) => {
       </Table>
     </>
   );
-};
+}

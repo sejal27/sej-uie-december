@@ -1,0 +1,20 @@
+query MyQuery {
+  CRM {
+    company(
+      uniqueIdentifier: "hs_object_id"
+      uniqueIdentifierValue: "10174130437"
+    ) {
+      name
+      associations {
+        task_collection__company_to_task {
+          total
+          items {
+            hs_task_type
+            hs_task_status
+            hs_created_by
+          }
+        }
+      }
+    }
+  }
+}

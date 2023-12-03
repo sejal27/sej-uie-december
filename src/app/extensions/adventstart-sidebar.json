@@ -1,0 +1,12 @@
+{
+  "type": "crm-card",
+  "data": {
+    "title": "December 2023 Challange: Sidebar Card",
+    "uid": "adventstart-sidebar",
+    "location": "crm.record.sidebar",
+    "module": {
+      "file": "adventstart-sidebar.jsx"
+    },
+    "objectTypes": [{ "name": "companies" }]
+  }
+}

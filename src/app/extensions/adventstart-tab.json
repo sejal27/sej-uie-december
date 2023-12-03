@@ -1,11 +1,11 @@
 {
   "type": "crm-card",
   "data": {
-    "title": "December 2",
-    "uid": "dec-card-1",
+    "title": "December 2023 Challange: Tab Card",
+    "uid": "adventstart-tab",
     "location": "crm.record.tab",
     "module": {
-      "file": "dec-2.jsx"
+      "file": "adventstart-tab.jsx"
     },
     "objectTypes": [{ "name": "companies" }]
   }
