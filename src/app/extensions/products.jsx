@@ -10,7 +10,6 @@ import {
   TableHeader,
   Flex,
   Text,
-  Stack,
   Tag,
   Link,
   LoadingSpinner,
@@ -98,20 +97,16 @@ const Products = ({ runServerless, fetchProperties, context }) => {
               {paginatedItems.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>
-                    <Stack>
-                      <Text format={{ fontWeight: "bold" }}>{item.name}</Text>
-                      {/* <Text variant="microcopy">{item.description}</Text> */}
-                    </Stack>
+                    <Text format={{ fontWeight: "bold" }}>{item.name}</Text>
+                    {/* <Text variant="microcopy">{item.description}</Text> */}
                   </TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>
                     {item.price ? parseFloat(item.price).toFixed(2) : ""}
                   </TableCell>
                   <TableCell width={350}>
-                    <Stack>
-                      <Link href={dealLink + item.dealid}>{item.dealname}</Link>
-                      <Tag>{item.dealstage.label}</Tag>
-                    </Stack>
+                    <Link href={dealLink + item.dealid}>{item.dealname}</Link>
+                    <Tag>{item.dealstage.label}</Tag>
                   </TableCell>
                 </TableRow>
               ))}
