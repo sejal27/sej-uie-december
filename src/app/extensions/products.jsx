@@ -7,12 +7,15 @@ import {
   TableCell,
   TableBody,
   TableHead,
+  Heading,
   TableHeader,
   Flex,
-  Text,
+  Panel,
   Tag,
   Link,
   LoadingSpinner,
+  DescriptionList,
+  DescriptionListItem,
 } from "@hubspot/ui-extensions";
 
 const PAGE_SIZE = 5;
@@ -20,10 +23,39 @@ const PAGE_SIZE = 5;
 const Products = ({ runServerless, fetchProperties, context }) => {
   const [page, setPage] = useState(1);
   const [hsObjectId, setHsObjectId] = useState(null);
-  const [lineItems, setlineItems] = useState([]);
+  const [deals, setDeals] = useState([]);
+  // const [lineItems, setLineItems] = useState([]);
+  const [selectedDealName, setSelectedDealName] = useState(null);
+  const [selectedDealLineItems, setSelectedDealLineItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getAssociatedRecordData = (objectId) => {
+  const LineitemsPanel = ({ dealname, lineitems }) => {
+    // console.log(selectedDeal.associations.line_item_collection__primary.items);
+    console.log("Inside panel", dealname);
+    console.log("Inside panel", lineitems);
+    return (
+      <Panel title="Product Line Items" id="linetimes-detail" width="medium">
+        <Flex direction="column" gap="md">
+          <Heading>Product line items associated with {dealname}</Heading>
+          {lineitems.map((item, index) => (
+            <DescriptionList direction="row" key={index}>
+              <DescriptionListItem label="Product Name">
+                {item.name}
+              </DescriptionListItem>
+              <DescriptionListItem label="Quantity">
+                {item.quantity}
+              </DescriptionListItem>
+              <DescriptionListItem label="Description">
+                {item.description}
+              </DescriptionListItem>
+            </DescriptionList>
+          ))}
+        </Flex>
+      </Panel>
+    );
+  };
+
+  const getAssociatedRecordData = () => {
     runServerless({
       name: "getProducts",
       parameters: {
@@ -31,24 +63,23 @@ const Products = ({ runServerless, fetchProperties, context }) => {
       },
     })
       .then((resp) => {
-        console.log(resp);
-        setlineItems(resp.response);
+        setDeals(resp.response);
       })
       .finally(() => setLoading(false));
   };
+
   useEffect(() => {
     setLoading(true);
     fetchProperties(["hs_object_id"]).then((properties) => {
       setHsObjectId(properties.hs_object_id);
     });
-    console.log(hsObjectId);
     if (hsObjectId) {
       getAssociatedRecordData(hsObjectId);
     }
   }, [fetchProperties, hsObjectId]);
 
-  const totalPages = Math.ceil((lineItems || []).length / PAGE_SIZE);
-  const paginatedItems = (lineItems || []).slice(
+  const totalPages = Math.ceil((deals || []).length / PAGE_SIZE);
+  const paginatedItems = (deals || []).slice(
     (page - 1) * PAGE_SIZE,
     (page - 1) * PAGE_SIZE + PAGE_SIZE
   );
@@ -58,6 +89,11 @@ const Products = ({ runServerless, fetchProperties, context }) => {
 
   return (
     <>
+      <LineitemsPanel
+        dealname={selectedDealName}
+        lineitems={selectedDealLineItems}
+      />
+
       <CrmCardActions
         actionConfigs={[
           {
@@ -87,26 +123,43 @@ const Products = ({ runServerless, fetchProperties, context }) => {
           >
             <TableHead>
               <TableRow>
-                <TableHeader>Line Item</TableHeader>
-                <TableHeader>Quantity</TableHeader>
-                <TableHeader>Price</TableHeader>
-                <TableHeader width={350}>Deal</TableHeader>
+                <TableHeader>Deal Name</TableHeader>
+                <TableHeader>Deal Stage</TableHeader>
+                <TableHeader>Line Items</TableHeader>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedItems.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>
-                    <Text format={{ fontWeight: "bold" }}>{item.name}</Text>
-                    {/* <Text variant="microcopy">{item.description}</Text> */}
-                  </TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>
-                    {item.price ? parseFloat(item.price).toFixed(2) : ""}
-                  </TableCell>
-                  <TableCell width={350}>
                     <Link href={dealLink + item.dealid}>{item.dealname}</Link>
+                  </TableCell>
+                  <TableCell>
                     <Tag>{item.dealstage.label}</Tag>
+                  </TableCell>
+                  <TableCell>
+                    {item.associations.line_item_collection__primary.items
+                      .length > 0 ? (
+                      <Link
+                        href=""
+                        preventDefault
+                        onClick={(__event, reactions) => {
+                          setSelectedDealName(item.dealname);
+                          setSelectedDealLineItems(
+                            item.associations.line_item_collection__primary
+                              .items
+                          );
+                          reactions.openPanel("linetimes-detail");
+                        }}
+                      >
+                        {
+                          item.associations.line_item_collection__primary.items
+                            .length
+                        }
+                      </Link>
+                    ) : (
+                      "0"
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

@@ -13,25 +13,28 @@ exports.main = async (context = {}) => {
     // console.log("resp:", data);
     let deals =
       data.data.CRM.company.associations.deal_collection__company_to_deal.items;
-
     // console.log("deals", deals);
+    // console.log(
+    //   "lineitems",
+    //   deals[0].associations.line_item_collection__primary.items
+    // );
 
-    const lineItems = deals.flatMap((record) =>
-      record.associations.line_item_collection__primary.items.map((item) => ({
-        amount: record.amount,
-        dealname: record.dealname,
-        dealstage: record.dealstage,
-        description: item.description,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        dealid: record.hs_object_id,
-      }))
-    );
+    // const lineItems = deals.flatMap((record) =>
+    //   record.associations.line_item_collection__primary.items.map((item) => ({
+    //     amount: record.amount,
+    //     dealname: record.dealname,
+    //     dealstage: record.dealstage,
+    //     description: item.description,
+    //     name: item.name,
+    //     price: item.price,
+    //     quantity: item.quantity,
+    //     dealid: record.hs_object_id,
+    //   }))
+    // );
     // console.log(lineItems);
 
     // Send the response data
-    return lineItems;
+    return deals;
   } catch (e) {
     return e;
   }
