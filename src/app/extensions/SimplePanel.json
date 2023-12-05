@@ -1,0 +1,12 @@
+{
+  "type": "crm-card",
+  "data": {
+    "title": "Simple Panel",
+    "uid": "adventstart-tab",
+    "location": "crm.record.tab",
+    "module": {
+      "file": "SimplePanel.jsx"
+    },
+    "objectTypes": [{ "name": "companies" }]
+  }
+}

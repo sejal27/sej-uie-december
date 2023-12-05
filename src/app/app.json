@@ -14,10 +14,7 @@
     "crm": {
       "cards": [
         {
-          "file": "extensions/adventstart-tab.json"
-        },
-        {
-          "file": "extensions/adventstart-sidebar.json"
+          "file": "extensions/SimplePanel.json"
         }
       ]
     }
