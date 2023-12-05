@@ -1,0 +1,16 @@
+{
+  "type": "crm-card",
+  "uid": "products-with-panels",
+  "data": {
+    "title": "Deals with Product Line Items",
+    "location": "crm.record.tab",
+    "module": {
+      "file": "products.jsx"
+    },
+    "objectTypes": [
+      {
+        "name": "companies"
+      }
+    ]
+  }
+}

@@ -14,7 +14,7 @@
     "crm": {
       "cards": [
         {
-          "file": "extensions/SimplePanel.json"
+          "file": "extensions/products.json"
         }
       ]
     }

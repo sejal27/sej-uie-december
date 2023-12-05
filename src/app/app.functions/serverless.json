@@ -3,6 +3,10 @@
     "createQuote": {
       "file": "createQuote.js",
       "secrets": []
+    },
+    "getProducts": {
+      "file": "getProducts.js",
+      "secrets": []
     }
   }
 }

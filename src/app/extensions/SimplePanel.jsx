@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
   Text,
-} from "@hubspot/ui-react";
+} from "@hubspot/ui-extensions";
 
 hubspot.extend(({ runServerlessFunction, actions }) => (
   <Extension runServerlessFunction={runServerlessFunction} actions={actions} />
@@ -68,7 +68,9 @@ const Extension = () => {
     <>
       <Panel id="my-panel" title={`${selected} Quotes`}>
         {selected &&
-          nameToQuotes[selected].map((quote) => <Text>{quote}</Text>)}
+          nameToQuotes[selected].map((quote) => (
+            <Text key={quote}>{quote}</Text>
+          ))}
       </Panel>
       <Table>
         <TableHead>
