@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-exports.main = async (context, sendResponse) => {
+exports.main = async (context = {}) => {
   const { hs_object_id } = context.parameters;
   const PRIVATE_APP_TOKEN = process.env["PRIVATE_APP_ACCESS_TOKEN"];
   try {
@@ -31,9 +31,9 @@ exports.main = async (context, sendResponse) => {
     // console.log(lineItems);
 
     // Send the response data
-    sendResponse(lineItems);
+    return lineItems;
   } catch (e) {
-    sendResponse(e);
+    return e;
   }
 };
 

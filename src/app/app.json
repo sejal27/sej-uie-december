@@ -7,7 +7,11 @@
     "crm.objects.deals.write",
     "e-commerce",
     "crm.objects.quotes.read",
-    "crm.objects.quotes.write"
+    "crm.objects.quotes.write",
+    "crm.objects.line_items.read",
+    "collector.graphql_schema.read",
+    "collector.graphql_query.execute",
+    "crm.objects.companies.read"
   ],
   "public": false,
   "extensions": {
