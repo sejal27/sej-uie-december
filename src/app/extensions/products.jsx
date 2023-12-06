@@ -13,6 +13,7 @@ import {
   Panel,
   Tag,
   Link,
+  Text,
   LoadingSpinner,
   DescriptionList,
   DescriptionListItem,
@@ -30,9 +31,6 @@ const Products = ({ runServerless, fetchProperties, context }) => {
   const [loading, setLoading] = useState(true);
 
   const LineitemsPanel = ({ dealname, lineitems }) => {
-    // console.log(selectedDeal.associations.line_item_collection__primary.items);
-    console.log("Inside panel", dealname);
-    console.log("Inside panel", lineitems);
     return (
       <Panel title="Product Line Items" id="linetimes-detail" width="medium">
         <Flex direction="column" gap="md">
@@ -110,6 +108,9 @@ const Products = ({ runServerless, fetchProperties, context }) => {
           },
         ]}
       />
+      <Text>
+        🔥 This too is added in local dev mode for the calendar view card.
+      </Text>
       <Flex direction="column" gap="small" align="stretch">
         {loading ? (
           <LoadingSpinner layout="centered" />

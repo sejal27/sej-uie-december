@@ -5,7 +5,7 @@ import {
   endOfMonth,
   differenceInDays,
 } from "date-fns";
-import { hubspot } from "@hubspot/ui-extensions";
+import { hubspot, Text } from "@hubspot/ui-extensions";
 import AdventStart from "./components/AdventStart";
 
 hubspot.extend(({ context }) => <AdventStartSidebar context={context} />);
@@ -20,10 +20,15 @@ const AdventStartSidebar = ({ context }) => {
   const daysUntilchristmas = differenceInDays(christmasThisYear, today);
 
   return (
-    <AdventStart
-      location={context.location}
-      weeks={weeks}
-      daysUntilchristmas={daysUntilchristmas}
-    />
+    <>
+      <Text>
+        🔥 This too is added in local dev mode for the calendar view card.
+      </Text>
+      <AdventStart
+        location={context.location}
+        weeks={weeks}
+        daysUntilchristmas={daysUntilchristmas}
+      />
+    </>
   );
 };

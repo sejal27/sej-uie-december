@@ -7,6 +7,14 @@
     "getProducts": {
       "file": "getProducts.js",
       "secrets": []
+    },
+    "createShipmentRecord_new": {
+      "file": "createShipmentRecord.js",
+      "secrets": []
+    },
+    "getAssociatedRecordData_new": {
+      "file": "getAssociatedRecordData.js",
+      "secrets": []
     }
   }
 }

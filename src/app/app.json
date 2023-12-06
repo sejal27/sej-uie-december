@@ -11,7 +11,9 @@
     "crm.objects.line_items.read",
     "collector.graphql_schema.read",
     "collector.graphql_query.execute",
-    "crm.objects.companies.read"
+    "crm.objects.companies.read",
+    "crm.objects.custom.read",
+    "crm.objects.custom.write"
   ],
   "public": false,
   "extensions": {
@@ -19,6 +21,12 @@
       "cards": [
         {
           "file": "extensions/products.json"
+        },
+        {
+          "file": "extensions/shipments.json"
+        },
+        {
+          "file": "extensions/shuttle-bus-quotes.json"
         }
       ]
     }

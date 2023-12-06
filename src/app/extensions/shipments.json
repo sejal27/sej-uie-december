@@ -1,0 +1,16 @@
+{
+  "type": "crm-card",
+  "uid": "shipments-card-with-panels",
+  "data": {
+    "title": "Manage Your Shipments",
+    "location": "crm.record.tab",
+    "module": {
+      "file": "shipments.jsx"
+    },
+    "objectTypes": [
+      {
+        "name": "deals"
+      }
+    ]
+  }
+}
