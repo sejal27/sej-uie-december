@@ -5,17 +5,16 @@ import { Checkbox, Text } from "@hubspot/ui-extensions";
 hubspot.extend(() => <Extension />);
 
 const Extension = () => {
-  const [isChecked, setIsChecked] = useState(true);
-  const handleCheckboxChange = (checked) => {
-    setIsChecked(checked);
-    console.log(`checked: ${checked}`);
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event);
   };
   return (
     <>
       <Checkbox
         name="checkbox"
         label="Checkbox"
-        checked={isChecked}
+        initialIsChecked={false}
         onChange={handleCheckboxChange}
       >
         <Text format={{ lineDecoration: isChecked ? "strikethrough" : "none" }}>
