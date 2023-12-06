@@ -1,26 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { hubspot } from "@hubspot/ui-extensions";
-import { Checkbox, Text } from "@hubspot/ui-extensions";
+import Task from "./components/Task.jsx";
 
 hubspot.extend(() => <Extension />);
 
 const Extension = () => {
-  const [isChecked, setIsChecked] = useState(false);
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event);
-  };
   return (
     <>
-      <Checkbox
-        name="checkbox"
-        label="Checkbox"
-        initialIsChecked={false}
-        onChange={handleCheckboxChange}
-      >
-        <Text format={{ lineDecoration: isChecked ? "strikethrough" : "none" }}>
-          Checkbox value
-        </Text>
-      </Checkbox>
+      <Task name="checkbox" initialIsChecked={false} taskValue="Task 1 text" />
+      <Task name="checkbox" initialIsChecked={false} taskValue="Task 2 text" />
+      <Task name="checkbox" initialIsChecked={false} taskValue="Task 3 text" />
     </>
   );
 };
