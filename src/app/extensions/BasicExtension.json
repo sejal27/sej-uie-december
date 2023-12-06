@@ -1,0 +1,12 @@
+{
+  "type": "crm-card",
+  "data": {
+    "title": "Basic extension for testing",
+    "uid": "basic-extension",
+    "location": "crm.record.tab",
+    "module": {
+      "file": "BasicExtension.jsx"
+    },
+    "objectTypes": [{ "name": "contacts" }]
+  }
+}

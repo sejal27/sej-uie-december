@@ -8,7 +8,7 @@ import {
   StepIndicator,
 } from "@hubspot/ui-extensions";
 import { CrmAssociationTable } from "@hubspot/ui-extensions/crm";
-import { QuotesPanel } from "./components/QuotesPanel.jsx";
+import QuotesPanel from "./components/QuotesPanel.jsx";
 
 // import { TripDetails } from "./components/TripDetails.jsx";
 // import { BusOptions } from "./components/BusOptions.jsx";
@@ -33,7 +33,7 @@ const ShuttleBusQuotes = ({ runServerless }) => {
   // const [distance, setDistance] = useState();
   // const [sku, setSku] = useState();
   // const [numberOfBuses, setNumberOfBuses] = useState();
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // const generateQuote = ({ ...payload }) => {
   //   // Execute serverless function to generate a quote
@@ -70,37 +70,37 @@ const ShuttleBusQuotes = ({ runServerless }) => {
   return (
     <>
       <QuotesPanel />
-      {loading == false && (
-        <Flex direction="column" gap="sm">
-          <Box>
-            <Button
-              type="button"
-              variant="primary"
-              size="sm"
-              onClick={(__event, reactions) => {
-                reactions.openPanel("quotes-panel");
-              }}
-            >
-              Create Quote
-            </Button>
-          </Box>
-          <CrmAssociationTable
-            objectTypeId="0-14"
-            propertyColumns={["hs_title", "hs_quote_amount"]}
-            quickFilterProperties={["hs_title", "hs_quote_amount"]}
-            pageSize={10}
-            associationLabelFilter={false}
-            sort={[
-              {
-                direction: 0,
-                columnName: "hs_createdate",
-              },
-            ]}
-            searchable={true}
-            pagination={true}
-          />
-        </Flex>
-      )}
+      {/* {loading == false && ( */}
+      <Flex direction="column" gap="sm">
+        <Box>
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            onClick={(__event, reactions) => {
+              reactions.openPanel("quotes-panel");
+            }}
+          >
+            Create Quote
+          </Button>
+        </Box>
+        <CrmAssociationTable
+          objectTypeId="0-14"
+          propertyColumns={["hs_title", "hs_quote_amount"]}
+          quickFilterProperties={["hs_title", "hs_quote_amount"]}
+          pageSize={10}
+          associationLabelFilter={false}
+          sort={[
+            {
+              direction: 0,
+              columnName: "hs_createdate",
+            },
+          ]}
+          searchable={true}
+          pagination={true}
+        />
+      </Flex>
+      {/* )} */}
       {/* If loading, show a spinner */}
       {loading === true && <LoadingSpinner />}
     </>
