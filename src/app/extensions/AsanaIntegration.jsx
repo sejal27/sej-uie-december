@@ -3,7 +3,7 @@ import { hubspot, Button, Flex, Box } from "@hubspot/ui-extensions";
 import Task from "./components/Task.jsx";
 
 const ASANA_WS_GID = "8587152060687";
-const ASANA_TEAM_GID = "1202716730818736";
+const ASANA_TEAM_GID = "1206118327825301";
 const ASANA_PROJECT_GID = "1206117893165586";
 
 const Asana = ({ runServerlss, fetchProperties, context }) => {
@@ -15,7 +15,7 @@ const Asana = ({ runServerlss, fetchProperties, context }) => {
       name: "getAsanaTasks",
       parameters: {
         // ASANA_WS_GID: ASANA_WS_GID,
-        // ASANA_TEAM_GID: ASANA_TEAM_GID,
+        ASANA_TEAM_GID: ASANA_TEAM_GID,
         ASANA_PROJECT_GID: ASANA_PROJECT_GID,
       },
     })
