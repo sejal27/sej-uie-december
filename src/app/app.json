@@ -29,7 +29,7 @@
           "file": "extensions/shuttle-bus-quotes.json"
         },
         {
-          "file": "extensions/BasicExtension.json"
+          "file": "extensions/AsanaIntegration.json"
         }
       ]
     }
