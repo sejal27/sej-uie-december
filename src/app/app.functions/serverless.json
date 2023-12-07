@@ -15,6 +15,10 @@
     "getAssociatedRecordData_new": {
       "file": "getAssociatedRecordData.js",
       "secrets": []
+    },
+    "getAsanaTasks": {
+      "file": "getAsanaTasks.js",
+      "secrets": ["ASANA_PAT"]
     }
   }
 }
