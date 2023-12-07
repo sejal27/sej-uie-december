@@ -8,6 +8,8 @@ const ASANA_PROJECT_GID = "1206117893165586";
 
 const Asana = ({ runServerlss, fetchProperties, context }) => {
   const [AsanaTasks, setAsanaTasks] = useState([]);
+  const [TeamUsers, setTeamUsers] = usestate([]);
+
   const [loading, setLoading] = useState(true);
 
   const getAsanaTasks = () => {
