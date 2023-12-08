@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  LoadingSpinner,
   Tag,
   Link,
 } from "@hubspot/ui-extensions";
@@ -19,7 +20,7 @@ import User from "./components/User.jsx";
 const ASANA_TEAM_GID = "1206118327825301";
 const ASANA_PROJECT_GID = "1206117893165586";
 
-const Asana = ({ runServerlss, fetchProperties, context }) => {
+const Asana = ({ runServerlss }) => {
   const [tasks, setAsanaTasks] = useState([]);
   const [users, setTeamUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,10 +58,10 @@ const Asana = ({ runServerlss, fetchProperties, context }) => {
     return user ? user : "Unknown";
   };
 
-  const getTask = (gid) => {
-    const task = tasks.find((task) => task.gid === gid);
-    return task ? task : "Unknown";
-  };
+  // const getTask = (gid) => {
+  //   const task = tasks.find((task) => task.gid === gid);
+  //   return task ? task : "Unknown";
+  // };
 
   const handleTaskChange = async (checked, gid) => {
     try {
@@ -97,6 +98,7 @@ const Asana = ({ runServerlss, fetchProperties, context }) => {
           completed: checked,
         },
       });
+
       return response;
     } catch (error) {
       console.error("Error updating task in Asana", error);
@@ -114,47 +116,55 @@ const Asana = ({ runServerlss, fetchProperties, context }) => {
 
   return (
     <>
-      <Table>
-        <TableBody>
-          {tasks.map((task) => {
-            const user = task.assignee ? getUser(task.assignee.gid) : null;
-            return (
-              <TableRow width="min" key={task.gid}>
-                <TableCell>
-                  <Task
-                    name={task.gid}
-                    // initialIsChecked={task.completed ? true : false}
-                    completed={task.completed ? true : false}
-                    taskValue={
-                      <Link href={task.permalink_url}>{task.name}</Link>
-                    }
-                    onTaskChange={handleTaskChange}
-                  />
-                </TableCell>
-                <TableCell>
-                  {user ? (
-                    <User
-                      name={user.name}
-                      photo={user.photo ? user.photo.image_21x21 : null}
-                    />
-                  ) : (
-                    "None"
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Tag variant={task.completed ? "success" : "warning"}>
-                    {task.completed ? "Complete" : "Incomplete"}
-                  </Tag>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-      <Divider />
-      <Button size="sm" onClick={getTasks}>
-        Refresh
-      </Button>
+      {loading && (
+        <LoadingSpinner size="sm" showLabel={true} label="🦄 Refreshing... " />
+      )}
+
+      {!loading && (
+        <>
+          <Table>
+            <TableBody>
+              {tasks.map((task) => {
+                const user = task.assignee ? getUser(task.assignee.gid) : null;
+                return (
+                  <TableRow width="min" key={task.gid}>
+                    <TableCell>
+                      <Task
+                        name={task.gid}
+                        // initialIsChecked={task.completed ? true : false}
+                        completed={task.completed ? true : false}
+                        taskValue={
+                          <Link href={task.permalink_url}>{task.name}</Link>
+                        }
+                        onTaskChange={handleTaskChange}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      {user ? (
+                        <User
+                          name={user.name}
+                          photo={user.photo ? user.photo.image_21x21 : null}
+                        />
+                      ) : (
+                        "None"
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Tag variant={task.completed ? "success" : "warning"}>
+                        {task.completed ? "Complete" : "Incomplete"}
+                      </Tag>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+          <Divider />
+          <Button size="sm" onClick={getTasks}>
+            Refresh
+          </Button>
+        </>
+      )}
     </>
   );
 };

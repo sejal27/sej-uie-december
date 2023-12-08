@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Checkbox, Text } from "@hubspot/ui-extensions";
 
 export default function Task({
@@ -6,14 +6,10 @@ export default function Task({
   description,
   label,
   completed,
-  initialIsChecked,
   taskValue,
   onTaskChange,
 }) {
-  // console.log(taskValue, completed);
-  // const [isChecked, setIsChecked] = useState(completed);
   const handleCheckboxChange = (checked) => {
-    // setIsChecked(checked);
     if (onTaskChange) {
       onTaskChange(checked, name);
     }
