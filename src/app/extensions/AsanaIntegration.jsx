@@ -149,6 +149,9 @@ const Asana = ({ runServerlss }) => {
 
       {!loading && (
         <>
+          <Button size="sm" onClick={getTasks}>
+            Refresh
+          </Button>
           <Table
             page={page}
             bordered={true}
@@ -211,9 +214,6 @@ const Asana = ({ runServerlss }) => {
             </TableBody>
           </Table>
           <Divider />
-          <Button size="sm" onClick={getTasks}>
-            Refresh
-          </Button>
         </>
       )}
     </>
