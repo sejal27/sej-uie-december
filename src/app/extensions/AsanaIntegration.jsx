@@ -26,31 +26,29 @@ const Asana = ({ runServerlss }) => {
   const [loading, setLoading] = useState(true);
 
   const getAsanaTasks = () => {
-    setLoading(true);
+    // setLoading(true);
     runServerlss({
       name: "getAsanaTasks",
       parameters: {
         ASANA_PROJECT_GID: ASANA_PROJECT_GID,
       },
-    })
-      .then((resp) => {
-        setAsanaTasks(resp.response);
-      })
-      .finally(() => setLoading(false));
+    }).then((resp) => {
+      setAsanaTasks(resp.response);
+    });
+    // .finally(() => setLoading(false));
   };
 
   const getAsanaTeamUsers = () => {
-    setLoading(true);
+    // setLoading(true);
     runServerlss({
       name: "getAsanaTeamUsers",
       parameters: {
         ASANA_TEAM_GID: ASANA_TEAM_GID,
       },
-    })
-      .then((resp) => {
-        setTeamUsers(resp.response.data);
-      })
-      .finally(() => setLoading(false));
+    }).then((resp) => {
+      setTeamUsers(resp.response.data);
+    });
+    // .finally(() => setLoading(false));
   };
 
   const getUser = (gid) => {
@@ -106,8 +104,12 @@ const Asana = ({ runServerlss }) => {
   };
 
   const getTasks = () => {
-    getAsanaTasks();
-    getAsanaTeamUsers();
+    setLoading(true);
+    setTimeout(() => {
+      getAsanaTasks();
+      getAsanaTeamUsers();
+      setLoading(false);
+    }, 2000);
   };
 
   useEffect(() => {
