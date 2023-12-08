@@ -1,40 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { hubspot, Button, Flex, Box } from "@hubspot/ui-extensions";
-import Task from "./components/Task.jsx";
+import TasksTable from "./components/TaskTable.jsx";
 
-const ASANA_WS_GID = "8587152060687";
+// const ASANA_WS_GID = "8587152060687";
 const ASANA_TEAM_GID = "1206118327825301";
 const ASANA_PROJECT_GID = "1206117893165586";
 
 const Asana = ({ runServerlss, fetchProperties, context }) => {
   const [AsanaTasks, setAsanaTasks] = useState([]);
-  const [TeamUsers, setTeamUsers] = usestate([]);
+  const [TeamUsers, setTeamUsers] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
   const getAsanaTasks = () => {
+    setLoading(true);
     runServerlss({
       name: "getAsanaTasks",
       parameters: {
-        // ASANA_WS_GID: ASANA_WS_GID,
-        ASANA_TEAM_GID: ASANA_TEAM_GID,
         ASANA_PROJECT_GID: ASANA_PROJECT_GID,
       },
     })
       .then((resp) => {
-        setAsanaTasks(resp);
+        setAsanaTasks(resp.response);
       })
       .finally(() => setLoading(false));
   };
+
+  const getAsanaTeamUsers = () => {
+    setLoading(true);
+    runServerlss({
+      name: "getAsanaTeamUsers",
+      parameters: {
+        ASANA_TEAM_GID: ASANA_TEAM_GID,
+      },
+    })
+      .then((resp) => {
+        setTeamUsers(resp.response.data);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const getTasks = () => {
+    getAsanaTasks();
+    getAsanaTeamUsers();
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+
   return (
-    <Flex direction="column" gap="md">
-      <Task name="checkbox" initialIsChecked={false} taskValue="Task 1 text" />
-      <Box>
-        <Button size="sm" onClick={getAsanaTasks}>
-          Refresh
-        </Button>
-      </Box>
-    </Flex>
+    <>
+      <TasksTable tasks={AsanaTasks} users={TeamUsers} />
+      <Button size="sm" onClick={getTasks}>
+        Refresh
+      </Button>
+    </>
   );
 };
 
