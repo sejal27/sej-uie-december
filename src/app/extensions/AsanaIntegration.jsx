@@ -3,7 +3,6 @@ import {
   hubspot,
   Button,
   // ExperimentalPanel,
-  Divider,
   Table,
   TableBody,
   TableCell,
@@ -213,7 +212,6 @@ const Asana = ({ runServerlss }) => {
               })}
             </TableBody>
           </Table>
-          <Divider />
         </>
       )}
     </>
