@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { hubspot, Button, Flex, Box } from "@hubspot/ui-extensions";
-import TasksTable from "./components/TaskTable.jsx";
+import {
+  hubspot,
+  Button,
+  Flex,
+  Box,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Tag,
+  Link,
+} from "@hubspot/ui-extensions";
+import Task from "./components/Task.jsx";
+import User from "./components/User.jsx";
 
 // const ASANA_WS_GID = "8587152060687";
 const ASANA_TEAM_GID = "1206118327825301";
 const ASANA_PROJECT_GID = "1206117893165586";
 
 const Asana = ({ runServerlss, fetchProperties, context }) => {
-  const [AsanaTasks, setAsanaTasks] = useState([]);
-  const [TeamUsers, setTeamUsers] = useState([]);
-
+  const [tasks, setAsanaTasks] = useState([]);
+  const [users, setTeamUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const getAsanaTasks = () => {
@@ -40,6 +52,57 @@ const Asana = ({ runServerlss, fetchProperties, context }) => {
       .finally(() => setLoading(false));
   };
 
+  const getUser = (gid) => {
+    const user = users.find((user) => user.gid === gid);
+    return user ? user : "Unknown";
+  };
+
+  const getTask = (gid) => {
+    const task = tasks.find((task) => task.gid === gid);
+    return task ? task : "Unknown";
+  };
+
+  const handleTaskChange = async (checked, gid) => {
+    try {
+      const response = await updateTaskInAsana(gid, checked);
+      if (response && response.status !== 200) {
+        setAsanaTasks((prevTasks) =>
+          prevTasks.map((task) => {
+            if (task.gid === gid) {
+              return { ...task, completed: checked };
+            }
+            return task;
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error updating task in Asana", error);
+      setAsanaTasks((prevTasks) =>
+        prevTasks.map((task) => {
+          if (task.gid === gid) {
+            return { ...task, completed: checked };
+          }
+          return task;
+        })
+      );
+    }
+  };
+
+  const updateTaskInAsana = async (gid, checked) => {
+    try {
+      const response = await runServerlss({
+        name: "updateAsanaTask",
+        parameters: {
+          GID: gid,
+          completed: checked,
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error("Error updating task in Asana", error);
+    }
+  };
+
   const getTasks = () => {
     getAsanaTasks();
     getAsanaTeamUsers();
@@ -51,7 +114,44 @@ const Asana = ({ runServerlss, fetchProperties, context }) => {
 
   return (
     <>
-      <TasksTable tasks={AsanaTasks} users={TeamUsers} />
+      <Table>
+        <TableBody>
+          {tasks.map((task) => {
+            const user = task.assignee ? getUser(task.assignee.gid) : null;
+            return (
+              <TableRow width="min" key={task.gid}>
+                <TableCell>
+                  <Task
+                    name={task.gid}
+                    // initialIsChecked={task.completed ? true : false}
+                    completed={task.completed ? true : false}
+                    taskValue={
+                      <Link href={task.permalink_url}>{task.name}</Link>
+                    }
+                    onTaskChange={handleTaskChange}
+                  />
+                </TableCell>
+                <TableCell>
+                  {user ? (
+                    <User
+                      name={user.name}
+                      photo={user.photo ? user.photo.image_21x21 : null}
+                    />
+                  ) : (
+                    "None"
+                  )}
+                </TableCell>
+                <TableCell>
+                  <Tag variant={task.completed ? "success" : "warning"}>
+                    {task.completed ? "Complete" : "Incomplete"}
+                  </Tag>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+      <Divider />
       <Button size="sm" onClick={getTasks}>
         Refresh
       </Button>

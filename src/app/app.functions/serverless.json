@@ -23,6 +23,10 @@
     "getAsanaTeamUsers": {
       "file": "getAsanaTeamUsers.js",
       "secrets": ["ASANA_PAT"]
+    },
+    "updateAsanaTask": {
+      "file": "updateAsanaTask.js",
+      "secrets": ["ASANA_PAT"]
     }
   }
 }

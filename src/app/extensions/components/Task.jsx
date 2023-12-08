@@ -5,23 +5,33 @@ export default function Task({
   name,
   description,
   label,
+  completed,
   initialIsChecked,
   taskValue,
+  onTaskChange,
 }) {
-  const [isChecked, setIsChecked] = useState(false);
+  // console.log(taskValue, completed);
+  // const [isChecked, setIsChecked] = useState(completed);
   const handleCheckboxChange = (checked) => {
-    setIsChecked(checked);
+    // setIsChecked(checked);
+    if (onTaskChange) {
+      onTaskChange(checked, name);
+    }
   };
   return (
     <>
       <Checkbox
         name={name}
         label={label}
-        initialIsChecked={initialIsChecked}
+        initialIsChecked={completed}
         onChange={handleCheckboxChange}
         description={description}
       >
-        <Text format={{ lineDecoration: isChecked ? "strikethrough" : "none" }}>
+        <Text
+          format={{
+            lineDecoration: completed ? "strikethrough" : "none",
+          }}
+        >
           {taskValue}
         </Text>
       </Checkbox>

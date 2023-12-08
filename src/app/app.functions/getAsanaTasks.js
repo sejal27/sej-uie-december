@@ -16,7 +16,7 @@ exports.main = async (context = {}) => {
       }
     );
 
-    console.log("tasks", tasks.data.data);
+    // console.log("tasks", tasks.data.data);
     return tasks.data.data;
   } catch (error) {
     console.log("error", error);

@@ -8,14 +8,14 @@ exports.main = async (context = {}) => {
 
   try {
     const users = await axios.get(
-      `https://app.asana.com/api/1.0/teams/${ASANA_TEAM_GID}/users`,
+      `https://app.asana.com/api/1.0/teams/${ASANA_TEAM_GID}/users?opt_fields=name,photo.image_21x21,`,
       {
         headers: {
           Authorization: `Bearer ${ASANA_PAT}`,
         },
       }
     );
-    console.log("users", users.data.data);
+    // console.log("users", users.data.data);
     return users.data;
   } catch (error) {
     return error;
