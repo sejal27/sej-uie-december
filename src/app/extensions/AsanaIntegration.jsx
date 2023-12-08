@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   hubspot,
   Button,
-  Flex,
-  Box,
+  // ExperimentalPanel,
   Divider,
   Table,
   TableBody,
@@ -12,6 +11,8 @@ import {
   LoadingSpinner,
   Tag,
   Link,
+  TableHeader,
+  TableHead,
 } from "@hubspot/ui-extensions";
 import Task from "./components/Task.jsx";
 import User from "./components/User.jsx";
@@ -21,12 +22,12 @@ const ASANA_TEAM_GID = "1206118327825301";
 const ASANA_PROJECT_GID = "1206117893165586";
 
 const Asana = ({ runServerlss }) => {
+  const [page, setPage] = useState(1);
   const [tasks, setAsanaTasks] = useState([]);
   const [users, setTeamUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const getAsanaTasks = () => {
-    // setLoading(true);
     runServerlss({
       name: "getAsanaTasks",
       parameters: {
@@ -35,11 +36,9 @@ const Asana = ({ runServerlss }) => {
     }).then((resp) => {
       setAsanaTasks(resp.response);
     });
-    // .finally(() => setLoading(false));
   };
 
   const getAsanaTeamUsers = () => {
-    // setLoading(true);
     runServerlss({
       name: "getAsanaTeamUsers",
       parameters: {
@@ -48,12 +47,11 @@ const Asana = ({ runServerlss }) => {
     }).then((resp) => {
       setTeamUsers(resp.response.data);
     });
-    // .finally(() => setLoading(false));
   };
 
   const getUser = (gid) => {
     const user = users.find((user) => user.gid === gid);
-    return user ? user : "Unknown";
+    return user ? user : "Not in Team";
   };
 
   // const getTask = (gid) => {
@@ -109,12 +107,39 @@ const Asana = ({ runServerlss }) => {
       getAsanaTasks();
       getAsanaTeamUsers();
       setLoading(false);
-    }, 2000);
+    }, 1000);
   };
 
   useEffect(() => {
     getTasks();
   }, []);
+
+  const PAGE_SIZE = 5;
+
+  const totalPages = Math.ceil((tasks || []).length / PAGE_SIZE);
+  const paginatedItems = (tasks || []).slice(
+    (page - 1) * PAGE_SIZE,
+    (page - 1) * PAGE_SIZE + PAGE_SIZE
+  );
+
+  const DEFAULT_STATE = {
+    name: "ascending",
+    assignee: "ascending",
+    completed: "ascending",
+  };
+  const [sortState, setSortState] = useState({ ...DEFAULT_STATE });
+  console.log(sortState.completed);
+  function handleOnSort(fieldName, sortDirection) {
+    const taskClone = [...tasks];
+    taskClone.sort((entry1, entry2) => {
+      if (sortDirection === "ascending") {
+        return entry1[fieldName] < entry2[fieldName] ? -1 : 1;
+      }
+      return entry2[fieldName] < entry1[fieldName] ? -1 : 1;
+    });
+    setSortState({ ...DEFAULT_STATE, [fieldName]: sortDirection });
+    setAsanaTasks(taskClone);
+  }
 
   return (
     <>
@@ -124,9 +149,30 @@ const Asana = ({ runServerlss }) => {
 
       {!loading && (
         <>
-          <Table>
+          <Table
+            page={page}
+            bordered={true}
+            paginated={totalPages > 1}
+            onPageChange={setPage}
+            pageCount={totalPages}
+          >
+            <TableHead>
+              <TableRow>
+                <TableHeader>Name</TableHeader>
+                <TableHeader>Assigned to</TableHeader>
+                <TableHeader
+                  sortDirection={sortState.completed}
+                  onSortChange={(sortDirection) =>
+                    handleOnSort("completed", sortDirection)
+                  }
+                >
+                  Status
+                </TableHeader>
+                <TableHeader>Actions</TableHeader>
+              </TableRow>
+            </TableHead>
             <TableBody>
-              {tasks.map((task) => {
+              {paginatedItems.map((task) => {
                 const user = task.assignee ? getUser(task.assignee.gid) : null;
                 return (
                   <TableRow width="min" key={task.gid}>
@@ -135,9 +181,7 @@ const Asana = ({ runServerlss }) => {
                         name={task.gid}
                         // initialIsChecked={task.completed ? true : false}
                         completed={task.completed ? true : false}
-                        taskValue={
-                          <Link href={task.permalink_url}>{task.name}</Link>
-                        }
+                        taskValue={task.name}
                         onTaskChange={handleTaskChange}
                       />
                     </TableCell>
@@ -155,6 +199,11 @@ const Asana = ({ runServerlss }) => {
                       <Tag variant={task.completed ? "success" : "warning"}>
                         {task.completed ? "Complete" : "Incomplete"}
                       </Tag>
+                    </TableCell>
+                    <TableCell>
+                      <Button size="extra-small" href={task.permalink_url}>
+                        View in Asana
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

@@ -6,7 +6,7 @@ exports.main = async (context = {}) => {
   console.log("inside serverless function getAsanaTasks");
 
   try {
-    const tasks = await axios.get(
+    const response = await axios.get(
       `https://app.asana.com/api/1.0/projects/${ASANA_PROJECT_GID}/tasks?opt_fields=name,assignee,completed,due_on,permalink_url`,
       {
         headers: {
@@ -17,7 +17,12 @@ exports.main = async (context = {}) => {
     );
 
     // console.log("tasks", tasks.data.data);
-    return tasks.data.data;
+    const tasks = response.data.data;
+    tasks.sort((a, b) => {
+      return a.completed - b.completed;
+    });
+
+    return tasks;
   } catch (error) {
     console.log("error", error);
     return error;
