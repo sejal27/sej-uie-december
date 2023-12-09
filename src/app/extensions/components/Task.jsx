@@ -4,7 +4,6 @@ import { Checkbox, Text } from "@hubspot/ui-extensions";
 export default function Task({
   name,
   description,
-  label,
   completed,
   taskValue,
   onTaskChange,
@@ -26,7 +25,6 @@ export default function Task({
     <>
       <Checkbox
         name={name}
-        label={label}
         checked={isChecked}
         onChange={handleCheckboxChange}
         description={description}

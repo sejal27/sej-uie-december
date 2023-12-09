@@ -8,10 +8,13 @@ import {
   TableCell,
   TableRow,
   LoadingSpinner,
+  Text,
   Tag,
-  Link,
+  Flex,
+  Box,
   TableHeader,
   TableHead,
+  Checkbox,
 } from "@hubspot/ui-extensions";
 import Task from "./components/Task.jsx";
 import User from "./components/User.jsx";
@@ -127,7 +130,6 @@ const Asana = ({ runServerlss }) => {
     completed: "ascending",
   };
   const [sortState, setSortState] = useState({ ...DEFAULT_STATE });
-  console.log(sortState.completed);
   function handleOnSort(fieldName, sortDirection) {
     const taskClone = [...tasks];
     taskClone.sort((entry1, entry2) => {
@@ -143,77 +145,89 @@ const Asana = ({ runServerlss }) => {
   return (
     <>
       {loading && (
-        <LoadingSpinner size="sm" showLabel={true} label="🦄 Refreshing... " />
+        <LoadingSpinner
+          size="sm"
+          showLabel={true}
+          label="🦄 Refreshing Tasks... "
+        />
       )}
-
-      {!loading && (
-        <>
-          <Button size="sm" onClick={getTasks}>
-            Refresh
-          </Button>
-          <Table
-            page={page}
-            bordered={true}
-            paginated={totalPages > 1}
-            onPageChange={setPage}
-            pageCount={totalPages}
-          >
-            <TableHead>
-              <TableRow>
-                <TableHeader>Name</TableHeader>
-                <TableHeader>Assigned to</TableHeader>
-                <TableHeader
-                  sortDirection={sortState.completed}
-                  onSortChange={(sortDirection) =>
-                    handleOnSort("completed", sortDirection)
-                  }
-                >
-                  Status
-                </TableHeader>
-                <TableHeader>Actions</TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedItems.map((task) => {
-                const user = task.assignee ? getUser(task.assignee.gid) : null;
-                return (
-                  <TableRow width="min" key={task.gid}>
-                    <TableCell>
-                      <Task
-                        name={task.gid}
-                        // initialIsChecked={task.completed ? true : false}
-                        completed={task.completed ? true : false}
-                        taskValue={task.name}
-                        onTaskChange={handleTaskChange}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      {user ? (
-                        <User
-                          name={user.name}
-                          photo={user.photo ? user.photo.image_21x21 : null}
+      <Flex gap="md" direction="column">
+        {!loading && (
+          <>
+            <Flex direction="row" gap="md">
+              <Button size="sm" onClick={getTasks}>
+                Refresh
+              </Button>
+              <Checkbox name="show-incomplete">Show Incomplete</Checkbox>
+            </Flex>
+            <Box></Box>
+            <Table
+              page={page}
+              bordered={true}
+              paginated={totalPages > 1}
+              onPageChange={setPage}
+              pageCount={totalPages}
+            >
+              <TableHead>
+                <TableRow>
+                  <TableHeader>Name</TableHeader>
+                  <TableHeader>Assigned to</TableHeader>
+                  <TableHeader
+                    sortDirection={sortState.completed}
+                    onSortChange={(sortDirection) =>
+                      handleOnSort("completed", sortDirection)
+                    }
+                  >
+                    Status
+                  </TableHeader>
+                  <TableHeader>Actions</TableHeader>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedItems.map((task) => {
+                  const user = task.assignee
+                    ? getUser(task.assignee.gid)
+                    : null;
+                  return (
+                    <TableRow key={task.gid}>
+                      <TableCell width="min">
+                        <Task
+                          name={task.gid}
+                          // initialIsChecked={task.completed ? true : false}
+                          completed={task.completed ? true : false}
+                          taskValue={task.name}
+                          onTaskChange={handleTaskChange}
                         />
-                      ) : (
-                        "None"
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Tag variant={task.completed ? "success" : "warning"}>
-                        {task.completed ? "Complete" : "Incomplete"}
-                      </Tag>
-                    </TableCell>
-                    <TableCell>
-                      <Button size="extra-small" href={task.permalink_url}>
-                        View in Asana
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </>
-      )}
+                      </TableCell>
+
+                      <TableCell width="min">
+                        {user ? (
+                          <User
+                            name={user.name}
+                            photo={user.photo ? user.photo.image_21x21 : null}
+                          />
+                        ) : (
+                          "None"
+                        )}
+                      </TableCell>
+                      <TableCell width="min">
+                        <Tag variant={task.completed ? "success" : "warning"}>
+                          {task.completed ? "Complete" : "Incomplete"}
+                        </Tag>
+                      </TableCell>
+                      <TableCell>
+                        <Button size="extra-small" href={task.permalink_url}>
+                          View in Asana
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </>
+        )}
+      </Flex>
     </>
   );
 };
