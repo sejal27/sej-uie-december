@@ -23,7 +23,7 @@ import User from "./components/User.jsx";
 const ASANA_TEAM_GID = "1206118327825301";
 const ASANA_PROJECT_GID = "1206117893165586";
 
-const Asana = ({ runServerlss, fetchProperties }) => {
+const Asana = ({ context, runServerlss, fetchProperties }) => {
   const [page, setPage] = useState(1);
   const [tasks, setAsanaTasks] = useState([]);
   const [users, setTeamUsers] = useState([]);
@@ -142,12 +142,7 @@ const Asana = ({ runServerlss, fetchProperties }) => {
     setAsanaTasks(taskClone);
   }
 
-  useEffect(() => {
-    getRestaurants();
-    fetchProperties(["firstname"]).then(({ firstname }) => {
-      setContactName(firstname);
-    });
-  }, []);
+  console.log(context);
 
   return (
     <>
