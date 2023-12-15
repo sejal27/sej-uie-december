@@ -23,7 +23,7 @@ import User from "./components/User.jsx";
 const ASANA_TEAM_GID = "1206118327825301";
 const ASANA_PROJECT_GID = "1206117893165586";
 
-const Asana = ({ runServerlss }) => {
+const Asana = ({ runServerlss, fetchProperties }) => {
   const [page, setPage] = useState(1);
   const [tasks, setAsanaTasks] = useState([]);
   const [users, setTeamUsers] = useState([]);
@@ -142,6 +142,13 @@ const Asana = ({ runServerlss }) => {
     setAsanaTasks(taskClone);
   }
 
+  useEffect(() => {
+    getRestaurants();
+    fetchProperties(["firstname"]).then(({ firstname }) => {
+      setContactName(firstname);
+    });
+  }, []);
+
   return (
     <>
       {loading && (
@@ -215,7 +222,7 @@ const Asana = ({ runServerlss }) => {
                           {task.completed ? "Complete" : "Incomplete"}
                         </Tag>
                       </TableCell>
-                      <TableCell>
+                      <TableCell width="min">
                         <Button size="extra-small" href={task.permalink_url}>
                           View in Asana
                         </Button>
