@@ -1,24 +1,36 @@
 const axios = require("axios");
-const asana = require("asana");
-
-// Make sure you have added these as secrets in your account using `hs secrets add`
-const { ASANA_PAT, ASANA_TEAM_GID, ASANA_CUSTOM_FIELD } = process.env;
-const asanaClient = asana.Client.create().useAccessToken(ASANA_PAT);
 
 exports.main = async (context = {}) => {
+  const { ASANA_PAT } = process.env;
+  const { project_gid, taskName, taskNotes, taskAssignee } = context.parameters;
   const { hs_object_id } = context.propertiesToSend;
-  const asanaTaskTag = "hs_" + hs_object_id;
-  const { name, notes, assignee, project } = context.parameters;
+  console.log("inside asana create task function");
+  const asanaTaskTag = "[hs_" + hs_object_id + "]";
 
   try {
-    const taskCreated = await asanaClient.tasks.createTask({
-      name: name,
-      notes: notes,
-      projects: [project],
-      assignee: assignee,
-    });
-    return taskCreated;
+    const task = await axios.post(
+      "https://app.asana.com/api/1.0/tasks",
+      {
+        data: {
+          name: `${taskName} ${asanaTaskTag}`,
+          completed: false,
+          notes: taskNotes,
+          assignee: taskAssignee,
+          projects: [project_gid],
+        },
+      },
+      {
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          Authorization: `Bearer ${ASANA_PAT}`,
+        },
+        params: { opt_fields: "name,assignee,due_on,notes,projects" },
+      }
+    );
+    console.log("response", task.data);
+    return task.data;
   } catch (error) {
-    return error;
+    console.error(error);
   }
 };

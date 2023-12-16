@@ -27,6 +27,10 @@
     "updateAsanaTask": {
       "file": "updateAsanaTask.js",
       "secrets": ["ASANA_PAT"]
+    },
+    "createAsanaTask": {
+      "file": "createAsanaTask.js",
+      "secrets": ["ASANA_PAT"]
     }
   }
 }

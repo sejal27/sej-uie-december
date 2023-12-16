@@ -15,7 +15,14 @@ import {
   TableHeader,
   TableHead,
   Checkbox,
+  ButtonRow,
+  Form,
+  Input,
+  Select,
+  DateInput,
+  TextArea,
 } from "@hubspot/ui-extensions";
+import { Panel } from "@hubspot/ui-extensions/experimental";
 import Task from "./components/Task.jsx";
 import User from "./components/User.jsx";
 
@@ -28,6 +35,11 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
   const [tasks, setAsanaTasks] = useState([]);
   const [users, setTeamUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [contactName, setContactName] = useState(null);
+  const [taskName, setTaskName] = useState(null);
+  const [taskAssignee, setTaskAssignee] = useState(null);
+  const [taskDueOn, setTaskDueOn] = useState(null);
+  const [taskNotes, setTaskNotes] = useState(null);
 
   const getAsanaTasks = () => {
     runServerlss({
@@ -96,10 +108,29 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
           completed: checked,
         },
       });
-
-      return response;
+      console.log(response);
+      // return response;
     } catch (error) {
       console.error("Error updating task in Asana", error);
+    }
+  };
+
+  const createAsanaTask = async (name, notes, dueon, assignee_gid) => {
+    try {
+      const response = await runServerlss({
+        name: "createAsanaTask",
+        parameters: {
+          taskName: taskName,
+          taskNotes: taskNotes,
+          taskAssignee: taskAssignee,
+          project_gid: ASANA_PROJECT_GID,
+        },
+        propertiesToSend: ["hs_object_id"],
+      });
+      console.log("Task created", response.response.data.name);
+      return response.response.data.name;
+    } catch (error) {
+      console.error("Error in creating asana task: ", error);
     }
   };
 
@@ -142,10 +173,77 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
     setAsanaTasks(taskClone);
   }
 
-  console.log(context);
+  useEffect(() => {
+    fetchProperties(["firstname"]).then(({ firstname }) => {
+      setContactName(firstname);
+    });
+  });
+
+  const CreateTaskPanel = () => {
+    const Footer = () => {
+      return (
+        <>
+          <Flex direction="row" justify="end">
+            <Button
+              variant="primary"
+              onClick={() =>
+                createAsanaTask(taskName, taskAssignee, taskDueOn, taskNotes)
+              }
+            >
+              Create
+            </Button>
+          </Flex>
+        </>
+      );
+    };
+
+    const assignees = users.map((user) => {
+      return { label: user.name, value: user.gid };
+    });
+    return (
+      <>
+        <Panel
+          id="create-task-panel"
+          title={`Add task for ${contactName}`}
+          width="md"
+          variant="modal"
+          footer={<Footer />}
+        >
+          <Flex direction="column" gap="sm">
+            <Input
+              name="task-name"
+              label="Task Name"
+              value={taskName}
+              onChange={setTaskName}
+            />
+            <Select
+              name="task-assignee"
+              label="Assignee"
+              value={taskAssignee}
+              options={assignees}
+              onChange={setTaskAssignee}
+            />
+            <DateInput
+              name="due-on"
+              label="Due On"
+              value={taskDueOn}
+              onChange={setTaskDueOn}
+            />
+            <TextArea
+              name="description"
+              label="Task Description"
+              value={taskNotes}
+              onChange={setTaskNotes}
+            />
+          </Flex>
+        </Panel>
+      </>
+    );
+  };
 
   return (
     <>
+      <CreateTaskPanel />
       {loading && (
         <LoadingSpinner
           size="sm"
@@ -157,9 +255,20 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
         {!loading && (
           <>
             <Flex direction="row" gap="md">
-              <Button size="sm" onClick={getTasks}>
-                Refresh
-              </Button>
+              <ButtonRow>
+                <Button size="sm" onClick={getTasks}>
+                  Refresh
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={(__event, reactions) => {
+                    reactions.openPanel("create-task-panel");
+                  }}
+                >
+                  Add Task
+                </Button>
+              </ButtonRow>
+
               <Checkbox name="show-incomplete">Show Incomplete</Checkbox>
             </Flex>
             <Box></Box>
@@ -219,7 +328,7 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
                       </TableCell>
                       <TableCell width="min">
                         <Button size="extra-small" href={task.permalink_url}>
-                          View in Asana
+                          View
                         </Button>
                       </TableCell>
                     </TableRow>
