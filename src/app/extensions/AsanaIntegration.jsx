@@ -40,6 +40,7 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
   const [taskAssignee, setTaskAssignee] = useState(null);
   const [taskDueOn, setTaskDueOn] = useState(null);
   const [taskNotes, setTaskNotes] = useState(null);
+  const [taskCreated, setTaskCreated] = useState(true);
 
   const getAsanaTasks = () => {
     runServerlss({
@@ -115,7 +116,7 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
     }
   };
 
-  const createAsanaTask = async (name, notes, dueon, assignee_gid) => {
+  const createAsanaTask = async (taskName, taskNotes, taskAssignee) => {
     try {
       const response = await runServerlss({
         name: "createAsanaTask",
@@ -127,7 +128,7 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
         },
         propertiesToSend: ["hs_object_id"],
       });
-      console.log("Task created", response.response.data.name);
+      // console.log("Task created", response.response.data.name);
       return response.response.data.name;
     } catch (error) {
       console.error("Error in creating asana task: ", error);
@@ -186,9 +187,7 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
           <Flex direction="row" justify="end">
             <Button
               variant="primary"
-              onClick={() =>
-                createAsanaTask(taskName, taskAssignee, taskDueOn, taskNotes)
-              }
+              onClick={() => createAsanaTask(taskName, taskAssignee, taskNotes)}
             >
               Create
             </Button>
@@ -223,12 +222,12 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
               options={assignees}
               onChange={setTaskAssignee}
             />
-            <DateInput
+            {/* <DateInput
               name="due-on"
               label="Due On"
               value={taskDueOn}
               onChange={setTaskDueOn}
-            />
+            /> */}
             <TextArea
               name="description"
               label="Task Description"
@@ -262,7 +261,18 @@ const Asana = ({ context, runServerlss, fetchProperties }) => {
                 <Button
                   size="sm"
                   onClick={(__event, reactions) => {
-                    reactions.openPanel("create-task-panel");
+                    reactions
+                      .openPanel("create-task-panel")
+                      .then(() => {
+                        try {
+                          reactions.closePanel("create-task-panel");
+                        } catch (error) {
+                          console.error("Error closing panel:", error);
+                        }
+                      })
+                      .catch((error) => {
+                        console.log("Error opening panel:", error);
+                      });
                   }}
                 >
                   Add Task
