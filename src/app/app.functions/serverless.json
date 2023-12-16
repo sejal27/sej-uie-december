@@ -15,6 +15,22 @@
     "getAssociatedRecordData_new": {
       "file": "getAssociatedRecordData.js",
       "secrets": []
+    },
+    "getAsanaTasks": {
+      "file": "getAsanaTasks.js",
+      "secrets": ["ASANA_PAT"]
+    },
+    "getAsanaTeamUsers": {
+      "file": "getAsanaTeamUsers.js",
+      "secrets": ["ASANA_PAT"]
+    },
+    "updateAsanaTask": {
+      "file": "updateAsanaTask.js",
+      "secrets": ["ASANA_PAT"]
+    },
+    "createAsanaTask": {
+      "file": "createAsanaTask.js",
+      "secrets": ["ASANA_PAT"]
     }
   }
 }

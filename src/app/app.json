@@ -13,7 +13,10 @@
     "collector.graphql_query.execute",
     "crm.objects.companies.read",
     "crm.objects.custom.read",
-    "crm.objects.custom.write"
+    "crm.objects.custom.write",
+    "crm.objects.contacts.read",
+    "crm.objects.contacts.write",
+    "crm.schemas.contacts.read"
   ],
   "public": false,
   "extensions": {
@@ -29,7 +32,7 @@
           "file": "extensions/shuttle-bus-quotes.json"
         },
         {
-          "file": "extensions/BasicExtension.json"
+          "file": "extensions/AsanaIntegration.json"
         }
       ]
     }

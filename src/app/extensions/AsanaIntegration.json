@@ -1,11 +1,11 @@
 {
   "type": "crm-card",
   "data": {
-    "title": "Basic extension for testing",
+    "title": "🦄 Asana Tasks",
     "uid": "basic-extension",
     "location": "crm.record.tab",
     "module": {
-      "file": "BasicExtension.jsx"
+      "file": "AsanaIntegration.jsx"
     },
     "objectTypes": [{ "name": "contacts" }]
   }
